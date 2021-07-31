@@ -1,11 +1,6 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -15,78 +10,36 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream.GetField;
 import java.io.OutputStreamWriter;
-import java.net.HttpCookie;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.naming.LimitExceededException;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.FormElement;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.HttpMethod;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequest;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.javascript.host.html.HTMLElement;
-import com.gargoylesoftware.htmlunit.util.Cookie;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.itextpdf.text.Chunk;
@@ -98,15 +51,13 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
-import android.content.res.Resources.Theme;
-import model.entity.Pagination;
 import model.entity.PartidoPdf;
 import model.entity.PartidosHoy;
 import model.entity.PartidosResultado;
-import model.entity.SwingDemo;
-import utils.Cloudflare;
 import utils.EnvioEmail;
 import utils.ScrapeUtils;
+import utils.Telegram;
+import utils.Constantes;
 
 
 public class Main {
@@ -149,7 +100,7 @@ public class Main {
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"};
 	public static void main(String[] args) {
-		frame = new JFrame("TopCornerSCRAP V3.0 by xKaixe");
+		frame = new JFrame("TopCornerSCRAP V4.0 by xKaixe");
         frame.setBounds(100, 100, 400, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         btnSubmit = new JButton("Generar consejos");
@@ -343,15 +294,21 @@ public class Main {
 											System.out.println("No se ha podido calcular la suma de corners "+ e.getMessage());
 										}
 						       			if(totalSumaCorners != null) {
+						       				Integer sumaPorcentajesConsejo = sumarPorcentajesConsejoCorner(porcentajeLocal, porcentajeVisitante);
+						       				String consejoObtenido = obtenerConsejo(divPredicciones, "Corner");
 						       				Paragraph paragraphLorem = new Paragraph();
 						       				paragraphLorem.add(Chunk.NEWLINE);
-						       				paragraphLorem.add("CornerOver: "+ sumarPorcentajesConsejoCorner(porcentajeLocal, porcentajeVisitante)+"% / * "+ numberFormat.format(totalSumaCorners)+ " * / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
+						       				paragraphLorem.add("CornerOver: "+ sumaPorcentajesConsejo +"% / * "+ numberFormat.format(totalSumaCorners)+ " * / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+ consejoObtenido);
 							            	listaElementosPdf.add(paragraphLorem);
+							            	Telegram.sendToTelegram(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
 						       			}else {
+						       				Integer sumaPorcentajesConsejo = sumarPorcentajesConsejoCorner(porcentajeLocal, porcentajeVisitante);
+						       				String consejoObtenido = obtenerConsejo(divPredicciones, "Corner");
 						       				Paragraph paragraphLorem = new Paragraph();
 						       				paragraphLorem.add(Chunk.NEWLINE);
-								            paragraphLorem.add("CornerOver: "+ sumarPorcentajesConsejoCorner(porcentajeLocal, porcentajeVisitante)+"%"+ " / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
-								            listaElementosPdf.add(paragraphLorem);	
+								            paragraphLorem.add("CornerOver: "+ sumaPorcentajesConsejo +"%"+ " / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
+								            listaElementosPdf.add(paragraphLorem);
+								            Telegram.sendToTelegram(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
 						       			}
 						       		}
 						       		// consejo under
@@ -364,15 +321,21 @@ public class Main {
 											System.out.println("No se ha podido calcular la suma de corners "+ e.getMessage());
 										}
 						       			if(totalSumaCorners != null) {
+						       				Integer sumaPorcentajesConsejo = sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante);
+						       				String consejoObtenido = obtenerConsejo(divPredicciones, "Corner");
 						       				Paragraph paragraphLorem = new Paragraph();
 						       				paragraphLorem.add(Chunk.NEWLINE);
 						       				paragraphLorem.add("Corner Under: "+sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante)+"% / * "+ numberFormat.format(totalSumaCorners) + " * / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
 						       				listaElementosPdf.add(paragraphLorem);
+						       				Telegram.sendToTelegram(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
 							            }else {
+							            	Integer sumaPorcentajesConsejo = sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante);
+						       				String consejoObtenido = obtenerConsejo(divPredicciones, "Corner");
 							            	Paragraph paragraphLorem = new Paragraph();
 						       				paragraphLorem.add(Chunk.NEWLINE);
 						       				paragraphLorem.add("Corner Under: "+sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante)+"%"+ " / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
 						       				listaElementosPdf.add(paragraphLorem);
+						       				Telegram.sendToTelegram(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
 							            }
 						       		}
 						       	}
