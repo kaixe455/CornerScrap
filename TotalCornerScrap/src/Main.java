@@ -363,7 +363,7 @@ public class Main {
 							            //documentoPdf.add(paragraphLorem);
 							            listaElementosPdf.add(paragraphLorem);
 							            if(Telegram.isMandarGoalOver(porcentajeTotal,lineaGolAsiatica)) {
-							            	Telegram.sendToTelegram(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            	Telegram.sendToTelegramGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
 							            }
 							            
 							            	
