@@ -100,19 +100,12 @@ public class Main {
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"};
 	public static void main(String[] args) {
-		frame = new JFrame("TopCornerSCRAP V4.0 by xKaixe");
+		frame = new JFrame("TopCornerSCRAP V4.1 by xKaixe");
         frame.setBounds(100, 100, 400, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         btnSubmit = new JButton("Generar consejos");
         btnSubmit.setBounds(120, 80, 150, 23); 
-        Date date = new Date();  
-        Date date3 = new GregorianCalendar(2021, Calendar.SEPTEMBER, 2).getTime();
-        if(date.before(date3)) {
         btnSubmit.setEnabled(true);
-        }
-        else {
-        btnSubmit.setEnabled(false);
-        }
 		progressBar = new JProgressBar(0, 1000);
 		progressBar.setBounds(90, 40, 200, 30);
 		progressBar.setValue(0);
