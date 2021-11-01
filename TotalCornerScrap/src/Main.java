@@ -69,6 +69,7 @@ public class Main {
     final static String LOGIN_FORM_URL = "https://www.totalcorner.com/user/login";
     final static String USERNAME = "Morigeri";  
     final static String PASSWORD = "Morigeri80";
+    List<String> listaPartidosFalladosTelegram = new ArrayList<String>();
     static String [] listAgent  = {"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
                             "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
                             "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
@@ -100,7 +101,7 @@ public class Main {
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"};
 	public static void main(String[] args) {
-		frame = new JFrame("TopCornerSCRAP V4.1 by xKaixe");
+		frame = new JFrame("TopCornerSCRAP V4.2 by xKaixe");
         frame.setBounds(100, 100, 400, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         btnSubmit = new JButton("Generar consejos");
@@ -245,6 +246,10 @@ public class Main {
 						       		Elements cornerOverEmpateLocal; 
 						       		Elements cornerOverPorcientoVisitante;
 						       		Elements cornerOverEmpateVisitante;
+						       		Elements cuotaCornerOver;
+						       		Elements cuotaCornerUnder;
+						       		String cornerOverCuota;
+					       			String cornerUnderCuota;
 						       		// si no tiene gol no aparece la barra de goles y los corners suben una posición
 						       		if(partido.getP_goal()[0].equals("")) {
 //							       		cornerOverPorciento = barras.get(4);
@@ -255,6 +260,10 @@ public class Main {
 						       			cornerOverEmpateLocal = document.select("#match_facts_container > div.col-xs-12.no-left-padding.no-right-padding > div > div:nth-child(5) > div:nth-child(1) > div > div:nth-child(3) > div > span.meter.draw");
 						       			cornerOverPorcientoVisitante = document.select("#match_facts_container > div.col-xs-12.no-left-padding.no-right-padding > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(3) > div > span:nth-child(1)");
 						       			cornerOverEmpateVisitante = document.select("#match_facts_container > div.col-xs-12.no-left-padding.no-right-padding > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(3) > div > span.meter.draw");
+						       			cuotaCornerOver = document.select(Constantes.xPATH_CUOTA_CORNER_OVER);
+						       			cornerOverCuota = cuotaCornerOver.attr("data-odds");
+						       			cuotaCornerUnder = document.select(Constantes.xPATH_CUOTA_CORNER_UNDER);
+						       			cornerUnderCuota = cuotaCornerUnder.attr("data-odds");
 						       		}else {
 //							       		cornerOverPorciento = barras.get(8);
 //								       	cornerOverEmpateLocal = barras.get(9);
@@ -264,6 +273,10 @@ public class Main {
 						       			cornerOverEmpateLocal = document.select("#match_facts_container > div.col-xs-12.no-left-padding.no-right-padding > div > div:nth-child(5) > div:nth-child(1) > div > div:nth-child(3) > div > span.meter.draw");
 						       			cornerOverPorcientoVisitante = document.select("#match_facts_container > div.col-xs-12.no-left-padding.no-right-padding > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(3) > div > span:nth-child(1)");
 						       			cornerOverEmpateVisitante = document.select("#match_facts_container > div.col-xs-12.no-left-padding.no-right-padding > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(3) > div > span.meter.draw");
+						       			cuotaCornerOver = document.select(Constantes.xPATH_CUOTA_CORNER_OVER);
+						       			cornerOverCuota = cuotaCornerOver.attr("data-odds");
+						       			cuotaCornerUnder = document.select(Constantes.xPATH_CUOTA_CORNER_UNDER);
+						       			cornerUnderCuota = cuotaCornerUnder.attr("data-odds");
 						       		
 						       		}
 						       		// calculo barra azul
@@ -294,7 +307,11 @@ public class Main {
 						       				paragraphLorem.add("CornerOver: "+ sumaPorcentajesConsejo +"% / * "+ numberFormat.format(totalSumaCorners)+ " * / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+ consejoObtenido);
 							            	listaElementosPdf.add(paragraphLorem);
 							            	if(consejoObtenido.contains("over")) {
-							            		Telegram.sendToTelegram(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
+							            		String partidoEnviado = Telegram.sendToTelegram(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerOverCuota);
+							            		if(partidoEnviado == null) {
+							            			String urlTelegram = Telegram.getUrlCorners(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerOverCuota);
+							            			EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+							            		}
 							            	}
 						       			}else {
 						       				Integer sumaPorcentajesConsejo = sumarPorcentajesConsejoCorner(porcentajeLocal, porcentajeVisitante);
@@ -304,7 +321,11 @@ public class Main {
 								            paragraphLorem.add("CornerOver: "+ sumaPorcentajesConsejo +"%"+ " / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
 								            listaElementosPdf.add(paragraphLorem);
 								            if(consejoObtenido.contains("over")) {
-								            	Telegram.sendToTelegram(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
+								            	String partidoEnviado = Telegram.sendToTelegram(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerOverCuota);
+								            	if(partidoEnviado == null) {
+								            		String urlTelegram = Telegram.getUrlCorners(Constantes.CHATOVERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerOverCuota);
+								            		EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+								            	}
 								            }
 						       			}
 						       		}
@@ -325,7 +346,11 @@ public class Main {
 						       				paragraphLorem.add("Corner Under: "+sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante)+"% / * "+ numberFormat.format(totalSumaCorners) + " * / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
 						       				listaElementosPdf.add(paragraphLorem);
 						       				if(consejoObtenido.contains("under")) {
-						       					Telegram.sendToTelegram(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
+						       					String partidoEnviado = Telegram.sendToTelegram(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerUnderCuota);
+						       					if(partidoEnviado == null) {
+						       						String urlTelegram = Telegram.getUrlCorners(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerUnderCuota);
+						       						EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+						       					}
 						       				}
 							            }else {
 							            	Integer sumaPorcentajesConsejo = sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante);
@@ -335,7 +360,11 @@ public class Main {
 						       				paragraphLorem.add("Corner Under: "+sumarPorcentajesConsejoCorner(porcentajeAmarilloLocal, porcentajeAmarilloVisitante)+"%"+ " / Linea Asiatica: "+partido.getP_corner()[0] + " / Consejo: "+obtenerConsejo(divPredicciones, "Corner"));
 						       				listaElementosPdf.add(paragraphLorem);
 						       				if(consejoObtenido.contains("under")) {
-						       					Telegram.sendToTelegram(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido);
+						       					String partidoEnviado = Telegram.sendToTelegram(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerUnderCuota);
+						       					if(partidoEnviado == null) {
+						       						String urlTelegram = Telegram.getUrlCorners(Constantes.CHATUNDERS, partidoH, partidoA, liga, hora[1], sumaPorcentajesConsejo, partido.getP_corner()[0],consejoObtenido, cornerUnderCuota);
+						       						EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+						       					}
 						       				}
 							            }
 						       		}
@@ -355,8 +384,12 @@ public class Main {
 							            paragraphLorem.add(Chunk.NEWLINE); 
 							            //documentoPdf.add(paragraphLorem);
 							            listaElementosPdf.add(paragraphLorem);
-							            if(Telegram.isMandarGoalOver(porcentajeTotal,lineaGolAsiatica)) {
-							            	Telegram.sendToTelegramGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            if(Telegram.isMandarGoalOver(porcentajeTotal,lineaGolAsiatica,consejoGoal )) {
+							            	String partidoEnviado = Telegram.sendToTelegramGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            	if(partidoEnviado == null) {
+							            		String urlTelegram = Telegram.getUrlGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            		EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+							            	}
 							            }
 							            
 							            	
@@ -373,8 +406,12 @@ public class Main {
 							            paragraphLorem.add(Chunk.NEWLINE); 
 							            //documentoPdf.add(paragraphLorem);
 							            listaElementosPdf.add(paragraphLorem);
-							            if(Telegram.isMandarGoalOver(porcentajeTotal,lineaGolAsiatica)) {
-							            	Telegram.sendToTelegramGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            if(Telegram.isMandarGoalOver(porcentajeTotal,lineaGolAsiatica,consejoGoal)) {
+							            	String partidoEnviado = Telegram.sendToTelegramGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            	if(partidoEnviado == null) {
+							            		String urlTelegram = Telegram.getUrlGoals(Constantes.CHATGOALSOVER, partidoH, partidoA, liga, hora[1], porcentajeTotal, lineaGolAsiatica, consejoGoal);
+							            		EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+							            	}
 							            }
 						       		}
 						       }
@@ -409,7 +446,11 @@ public class Main {
 							           // documentoPdf.add(paragraphLorem);
 							            listaElementosPdf.add(paragraphLorem);
 							            if(Telegram.isMandarHA(consejoFinal[0],partidoH, esLocalConsejo)) {
-							            	Telegram.sendToTelegramHA(Constantes.CHATHADICAP, partidoH, partidoA, liga, hora[1], consejoFinal[0]);
+							            	String partidoEnviado = Telegram.sendToTelegramHA(Constantes.CHATHADICAP, partidoH, partidoA, liga, hora[1], consejoFinal[0]);
+							            	if(partidoEnviado == null) {
+							            		String urlTelegram = Telegram.getUrlHA(Constantes.CHATHADICAP, partidoH, partidoA, liga, hora[1], consejoFinal[0]);
+							            		EnvioEmail.enviarFallidosTelegram(urlTelegram, partido.getId());
+							            	}
 							            }
 						       		}
 						       // consejo HA no Favorito.

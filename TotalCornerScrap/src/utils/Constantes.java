@@ -16,7 +16,13 @@ public final class Constantes {
 	
 	public static final String BANDERIN = "%F0%9F%9A%A9";
 	
+	public static final String SACO_DINERO = "%F0%9F%92%B0";
+	
 	public static final String HANDICAP_LOGO = "%F0%9F%80%84%EF%B8%8F";
+	
+	public static final String xPATH_CUOTA_CORNER_OVER = "#place_bet_div > table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(2)";
+	
+	public static final String xPATH_CUOTA_CORNER_UNDER = "#place_bet_div > table:nth-child(3) > tbody > tr:nth-child(2) > td:nth-child(3)";
 	
 	
 
