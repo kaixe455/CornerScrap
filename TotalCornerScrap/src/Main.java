@@ -101,7 +101,7 @@ public class Main {
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"};
 	public static void main(String[] args) {
-		frame = new JFrame("TopCornerSCRAP V4.2 by xKaixe");
+		frame = new JFrame("TopCornerSCRAP V4.3 by xKaixe");
         frame.setBounds(100, 100, 400, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         btnSubmit = new JButton("Generar consejos");
