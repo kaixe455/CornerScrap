@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 
 public class Telegram {
 
@@ -15,9 +18,11 @@ public class Telegram {
 	      
 	        //chatId
 	        String chatId = chat;
-	        String text =Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal)+" vs "+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + " " + fecha
-	        		+ "%0A" + Constantes.BANDERIN + "%20" + escaparSignos(consejo) 
-	        		+ "%0A" + Constantes.SACO_DINERO + "%20" + escaparSignos(cuota) ;
+	        String text =Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal)+"%20vs%20"+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + "%20" + fecha
+	        		+ "%0A" + Constantes.BANDERIN + "%20" + escaparSignos(consejo);
+	        if(cuota != null && !cuota.isEmpty()) {
+	        			text = text + "%0A" + Constantes.SACO_DINERO + "%20" + escaparSignos(cuota) ;
+	        }
 	        urlString = String.format(urlString, apiToken, chatId, text);
 
 	        try {
@@ -38,9 +43,11 @@ public class Telegram {
 	      
 	        //chatId
 	        String chatId = chat;
-	        String text =Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal)+" vs "+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + " " + fecha
-	        		+ "%0A" + Constantes.BANDERIN + "%20" + escaparSignos(consejo) 
-	        		+ "%0A" + Constantes.SACO_DINERO + "%20" + escaparSignos(cuota) ;
+	        String text =Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal)+"%20vs%20"+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + "%20" + fecha
+	        		+ "%0A" + Constantes.BANDERIN + "%20" + escaparSignos(consejo);
+	        if(cuota != null && !cuota.isEmpty()) {
+    			text = text + "%0A" + Constantes.SACO_DINERO + "%20" + escaparSignos(cuota) ;
+    		}
 	        urlString = String.format(urlString, apiToken, chatId, text);
 	        return urlString;
 	    	
@@ -53,7 +60,7 @@ public class Telegram {
 	      
 	        //chatId
 	        String chatId = chat;
-	        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + " vs "+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + " " + fecha
+	        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + "%20vs%20"+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + "%20" + fecha
 	        		+ "%0A" + Constantes.HANDICAP_LOGO + "%20" + escaparSignos(consejo);
 	        urlString = String.format(urlString, apiToken, chatId, text);
 
@@ -75,7 +82,7 @@ public class Telegram {
 		      
 		        //chatId
 		        String chatId = chat;
-		        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + " vs "+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + " " + fecha
+		        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + "%20vs%20"+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E" +"%0A%E2%9A%BD%20"+ escaparSignos(liga) + "%20" + fecha
 		        		+ "%0A" + Constantes.HANDICAP_LOGO + "%20" + escaparSignos(consejo);
 		        urlString = String.format(urlString, apiToken, chatId, text);
 		        return urlString;
@@ -89,8 +96,8 @@ public class Telegram {
 	      
 	        //chatId
 	        String chatId = chat;
-	        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + " vs "+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E"
-	        		+"%0A" + Constantes.BALON_FUTBOL + "%20" +escaparSignos(liga) + " " + fecha
+	        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + "%20vs%20"+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E"
+	        		+"%0A" + Constantes.BALON_FUTBOL + "%20" +escaparSignos(liga) + "%20" + fecha
 	        		+ "%0A" + Constantes.BALON_FUTBOL + "%20" + escaparSignos(consejo);
 	        urlString = String.format(urlString, apiToken, chatId, text);
 
@@ -113,8 +120,8 @@ public class Telegram {
 	      
 	        //chatId
 	        String chatId = chat;
-	        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + " vs "+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E"
-	        		+"%0A" + Constantes.BALON_FUTBOL + "%20" +escaparSignos(liga) + " " + fecha
+	        String text = Constantes.BOLA_MUNDO + "%20" + "%3Cb%3E" + escaparSignos(equipoLocal) + "%20vs%20"+ escaparSignos(equipoVisitante) + "%3C%2Fb%3E"
+	        		+"%0A" + Constantes.BALON_FUTBOL + "%20" +escaparSignos(liga) + "%20" + fecha
 	        		+ "%0A" + Constantes.BALON_FUTBOL + "%20" + escaparSignos(consejo);
 	        urlString = String.format(urlString, apiToken, chatId, text);
 	        return urlString;
@@ -154,17 +161,22 @@ public class Telegram {
 	    }
 	    
 	    public static String escaparSignos (String palabra) {
-	    	
-	    	String palabraEscapada = palabra;
-	 
-	    	if(palabra.contains("+")) {
-	    		palabraEscapada = palabra.replace("+", "%2B");
-	    	}
-	    	if (palabra.contains("-")) {
-	    		palabraEscapada = palabra.replace("-", "//-");
-	    	}
-	    	
-	    	return palabraEscapada;
+			 try {
+			    	return URLEncoder.encode(palabra, StandardCharsets.UTF_8.toString());
+			 }catch (Exception e) {
+				 String palabraEscapada = palabra;
+				 if(palabra.contains("+")) {
+			    		palabraEscapada = palabra.replace("+", "%2B");
+			    	}
+			    	if (palabra.contains("-")) {
+			    		palabraEscapada = palabra.replace("-", "//-");
+			    	}
+			    	if(palabra.contains(" ")) {
+			    		palabraEscapada = palabra.replaceAll(" ", "%20");
+			    	}
+			    	
+			    	return palabraEscapada;
+			}
 	    }
 	
 
