@@ -17,8 +17,6 @@ import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -54,10 +52,10 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import model.entity.PartidoPdf;
 import model.entity.PartidosHoy;
 import model.entity.PartidosResultado;
+import utils.Constantes;
 import utils.EnvioEmail;
 import utils.ScrapeUtils;
 import utils.Telegram;
-import utils.Constantes;
 
 
 public class Main {

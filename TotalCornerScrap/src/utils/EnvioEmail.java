@@ -1,10 +1,16 @@
 package utils;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import javax.activation.*;
-import javax.mail.*;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -16,8 +22,7 @@ public class EnvioEmail {
 public static void enviar(String titulo,byte[] bytesEmail) {
     final String username = "versiontotalcorner@gmail.com";
     final String emailPara = "versiontotalcorner@gmail.com";
-    final String from = "versiontotalcorner@gmail.com";
-    final String password = "Morigeri80";
+    final String password = "Corsita2.0";
 
     Properties props = new Properties();
     props.put("mail.smtp.auth", true);
@@ -73,8 +78,7 @@ public static void enviar(String titulo,byte[] bytesEmail) {
 	public static void enviarFallidosTelegram(String urlTelegram,String idPartido) {
 	    final String username = "versiontotalcorner@gmail.com";
 	    final String emailPara = "versiontotalcorner@gmail.com";
-	    final String from = "versiontotalcorner@gmail.com";
-	    final String password = "Morigeri80";
+	    final String password = "Corsita2.0";
 
 	    Properties props = new Properties();
 	    props.put("mail.smtp.auth", true);
