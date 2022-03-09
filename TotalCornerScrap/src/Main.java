@@ -66,7 +66,7 @@ public class Main {
     final static String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"; 
     final static String LOGIN_FORM_URL = "https://www.totalcorner.com/user/login";
     final static String USERNAME = "Morigeri";  
-    final static String PASSWORD = "Morigeri80";
+    final static String PASSWORD = "Corsita2.0";
     List<String> listaPartidosFalladosTelegram = new ArrayList<String>();
     static String [] listAgent  = {"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
                             "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
@@ -99,7 +99,7 @@ public class Main {
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"};
 	public static void main(String[] args) {
-		frame = new JFrame("TopCornerSCRAP V4.4 by xKaixe");
+		frame = new JFrame("TopCornerSCRAP V4.5 by xKaixe");
         frame.setBounds(100, 100, 400, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         btnSubmit = new JButton("Generar consejos");
@@ -1025,7 +1025,7 @@ public class Main {
 			Connection.Response response = Jsoup.connect("https://www.totalcorner.com/user/login")
 		            .method(Connection.Method.POST)
 		            .data("username", "Morigeri")
-		            .data("password", "Morigeri80")
+		            .data("password", "Corsita2.0")
 		            .execute();
 
 

@@ -64,7 +64,7 @@ public class ScrapeUtils {
         WebElement password=driver.findElement(By.id("inputPassword3"));
         List<WebElement> login= driver.findElements(By.xpath("//div/button[@type='submit']"));
         username.sendKeys("Morigeri");
-        password.sendKeys("Morigeri80");
+        password.sendKeys("Corsita2.0");
         WebElement loginBotonReal = login.get(2);
         loginBotonReal.click();
         WebElement seleccionarNumeroPartidos = driver.findElement(By.id("match_stats_match_count"));
